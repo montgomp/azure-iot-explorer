@@ -95,7 +95,7 @@ let indexConfig = {
         //new BundleAnalyzerPlugin(),
         //This can be split out into two webpack configs each defining its own controller endpoint
         new DefinePlugin({
-            _CONTROLLER_ENDPOINT: "'http://127.0.0.1:8081/'"
+            _CONTROLLER_ENDPOINT: "''"
         }),
         new MonacoPlugin({
             languages: ["json"]

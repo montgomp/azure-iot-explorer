@@ -1342,7 +1342,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
         liveValidate={true}
         noHtml5Validate={false}
         noValidate={false}
-        omitExtraData={false}
         safeRenderCompletion={false}
         schema={
           Object {
@@ -1396,7 +1395,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                   "ArrayField": [Function],
                   "BooleanField": [Function],
                   "DescriptionField": [Function],
-                  "NullField": [Function],
                   "NumberField": [Function],
                   "ObjectField": [Function],
                   "OneOfField": [Function],
@@ -1462,7 +1460,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                   "ArrayField": [Function],
                   "BooleanField": [Function],
                   "DescriptionField": [Function],
-                  "NullField": [Function],
                   "NumberField": [Function],
                   "ObjectField": [Function],
                   "OneOfField": [Function],
@@ -3087,7 +3084,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                           "ArrayField": [Function],
                           "BooleanField": [Function],
                           "DescriptionField": [Function],
-                          "NullField": [Function],
                           "NumberField": [Function],
                           "ObjectField": [Function],
                           "OneOfField": [Function],
@@ -3162,7 +3158,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                             "ArrayField": [Function],
                             "BooleanField": [Function],
                             "DescriptionField": [Function],
-                            "NullField": [Function],
                             "NumberField": [Function],
                             "ObjectField": [Function],
                             "OneOfField": [Function],
@@ -3240,7 +3235,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                               "ArrayField": [Function],
                               "BooleanField": [Function],
                               "DescriptionField": [Function],
-                              "NullField": [Function],
                               "NumberField": [Function],
                               "ObjectField": [Function],
                               "OneOfField": [Function],
@@ -3311,7 +3305,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                                 "ArrayField": [Function],
                                 "BooleanField": [Function],
                                 "DescriptionField": [Function],
-                                "NullField": [Function],
                                 "NumberField": [Function],
                                 "ObjectField": [Function],
                                 "OneOfField": [Function],
@@ -3382,7 +3375,6 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                                   "ArrayField": [Function],
                                   "BooleanField": [Function],
                                   "DescriptionField": [Function],
-                                  "NullField": [Function],
                                   "NumberField": [Function],
                                   "ObjectField": [Function],
                                   "OneOfField": [Function],
@@ -3450,7 +3442,9 @@ exports[`complexReportedFormPanel matches snapshot without twinWithSchema 1`] = 
                 <div
                   className="errors"
                 >
-                  <ErrorList />
+                  <ErrorList>
+                    <div />
+                  </ErrorList>
                 </div>
               </div>
             </Component>
