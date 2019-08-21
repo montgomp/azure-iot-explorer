@@ -27,6 +27,13 @@ This application provides users an easy and visualized way to interact with Azur
 
 If you'd like to package the app yourself, please refer to [FAQ](https://github.com/Azure/azure-iot-explorer/wiki/FAQ)
 
+### Hosting in website
+## In active development for a more user-friendly experience. Not fully supported currently
+1. Open a Node capable command prompt
+1. git clone https://github.com/Azure/azure-iot-explorer.git
+1. run `npm install`
+1. run `npm run website`. This will package the `server.js`, `index.html`, and various .js files into `./dist` folder that can be copied out to your node server and configured as needed. 
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
