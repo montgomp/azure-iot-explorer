@@ -8,6 +8,8 @@ import cors = require('cors');
 import request = require('request');
 import { Client as HubClient } from 'azure-iothub';
 import { Message as CloudToDeviceMessage } from 'azure-iot-common';
+import path = require('path');
+
 import { EventHubClient, EventPosition, delay, EventHubRuntimeInformation, ReceiveHandler } from '@azure/event-hubs';
 import { generateDataPlaneRequestBody, generateDataPlaneResponse } from './dataPlaneHelper';
 
@@ -33,10 +35,21 @@ interface Message {
 }
 
 app.use(bodyParser.json());
-app.use(cors({
-    credentials: true,
-    origin: 'http://127.0.0.1:3000',
-}));
+// used for the electron browser instance to connect to the API. For hosted site, comment out
+// app.use(cors({
+//     credentials: true,
+//     origin: 'http://127.0.0.1:3000',
+// }));
+
+// for hosted website, render when GET to '/' is issued
+app.get('/', (req: express.Request, res: express.Response) => {
+    res.sendFile(path.join(__dirname, '../index.html'));
+});
+
+// for hosted website, render when GET to '/' is issued
+app.get('/*.js', (req: express.Request, res: express.Response) => {
+    res.sendFile(path.join(__dirname, '../', req.path));
+});
 
 app.post('/api/DataPlane', (req: express.Request, res: express.Response) => {
     try {
