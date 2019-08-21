@@ -55,7 +55,10 @@
     "test": "npm run localization && jest --coverage",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand -i --watch",
     "test:updateSnapshot": "jest --updateSnapshot",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "website": "npm run clean && npm run website:check-dir && npm run build && npm run website:move-files && node ./dist/server/server.js",
+    "website:check-dir": "IF NOT EXIST \"./dist/server\" mkdir \"./dist/server\"",
+    "website:move-files": "copy \".\\src\\server\\server.js\" \".\\dist\\server\\server.js\""
   },
   "repository": {
     "type": "git",
