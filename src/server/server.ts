@@ -33,11 +33,10 @@ interface Message {
 }
 
 app.use(bodyParser.json());
-// used for the electron browser instance to connect to the API. For hosted site, comment out
-// app.use(cors({
-//     credentials: true,
-//     origin: 'http://127.0.0.1:3000',
-// }));
+app.use(cors({
+    credentials: true,
+    origin: 'http://127.0.0.1:3000',
+}));
 
 // for hosted website, render when GET to '/' is issued
 app.get('/', (req: express.Request, res: express.Response) => {
@@ -46,6 +45,10 @@ app.get('/', (req: express.Request, res: express.Response) => {
 
 // for hosted website, render when GET to '/' is issued
 app.get('/*.js', (req: express.Request, res: express.Response) => {
+    res.sendFile(path.join(__dirname, '../', req.path));
+});
+// for hosted website, render when GET to '/' is issued
+app.get('/*.css', (req: express.Request, res: express.Response) => {
     res.sendFile(path.join(__dirname, '../', req.path));
 });
 
