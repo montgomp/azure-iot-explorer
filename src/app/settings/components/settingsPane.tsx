@@ -18,15 +18,13 @@ import { MaskedCopyableTextField } from '../../shared/components/maskedCopyableT
 import LabelWithTooltip from '../../shared/components/labelWithTooltip';
 import '../../css/_settingsPane.scss';
 import { ConfirmationDialog } from './confirmationDialog';
-import { Theme } from '../../../themer';
+import { Themes, ThemeContext } from '../../shared/contexts/themeContext';
 
 export interface SettingsPaneProps extends Settings {
     isOpen: boolean;
-    theme: Theme;
 }
 
 export interface SettingsPaneActions {
-    onSetTheme: (theme: Theme) => void;
     onSettingsVisibleChanged: (visible: boolean) => void;
     onSettingsSave: (payload: Settings) => void;
     refreshDevices: () => void;
@@ -43,7 +41,7 @@ export interface Settings {
     repositoryLocations?: RepositorySettings[];
 }
 
-interface SettingsPaneState extends Settings{
+interface SettingsPaneState extends Settings {
     error?: string;
     isDirty: boolean;
     showConfirmationDialog: boolean;
@@ -55,8 +53,9 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
         const repositoryLocations = props.repositoryLocations ? props.repositoryLocations.map(value => {
             return {
                 connectionString: value.connectionString,
-                repositoryLocationType: value.repositoryLocationType};
-            }) : [];
+                repositoryLocationType: value.repositoryLocationType
+            };
+        }) : [];
         this.state = {
             hubConnectionString: props.hubConnectionString,
             isDirty: false,
@@ -91,18 +90,18 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
                                 ariaLabel={context.t(ResourceKeys.connectivityPane.connectionStringTextBox.label)}
                                 label={context.t(ResourceKeys.connectivityPane.connectionStringTextBox.label)}
                                 calloutContent={(<div className="callout-wrapper">
-                                <div className="content">
-                                    {context.t(ResourceKeys.settings.configuration.connectionString.sublabel)}
-                                </div>
-                                <div className="footer">
-                                    <Link
-                                        href={context.t(ResourceKeys.settings.configuration.connectionString.link)}
-                                        target="_blank"
-                                    >
-                                        {context.t(ResourceKeys.settings.configuration.connectionString.link)}
-                                    </Link>
-                                </div>
-                            </div>)}
+                                    <div className="content">
+                                        {context.t(ResourceKeys.settings.configuration.connectionString.sublabel)}
+                                    </div>
+                                    <div className="footer">
+                                        <Link
+                                            href={context.t(ResourceKeys.settings.configuration.connectionString.link)}
+                                            target="_blank"
+                                        >
+                                            {context.t(ResourceKeys.settings.configuration.connectionString.link)}
+                                        </Link>
+                                    </div>
+                                </div>)}
                                 value={this.state.hubConnectionString}
                                 allowMask={true}
                                 readOnly={false}
@@ -134,22 +133,25 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
                         </section>
                         <section aria-label={context.t(ResourceKeys.settings.theme.headerText)}>
                             <h3 role="heading" aria-level={1}>{context.t(ResourceKeys.settings.theme.headerText)}</h3>
-                            <Toggle
-                                onText={context.t(ResourceKeys.settings.theme.darkTheme)}
-                                offText={context.t(ResourceKeys.settings.theme.lightTheme)}
-                                onChange={this.setTheme}
-                                checked={this.props.theme === Theme.dark}
-                            />
+                            <ThemeContext.Consumer>
+                                {themeContext => {
+                                    const setTheme = (ev: React.MouseEvent<HTMLElement>, darkTheme: boolean) => {
+                                        themeContext.setTheme(darkTheme ? Themes.dark : Themes.light);
+                                    };
+                                    return (<Toggle
+                                        onText={context.t(ResourceKeys.settings.theme.darkTheme)}
+                                        offText={context.t(ResourceKeys.settings.theme.lightTheme)}
+                                        onChange={setTheme}
+                                        checked={themeContext.theme === Themes.dark}
+                                    />);
+                                }}
+                            </ThemeContext.Consumer>
                         </section>
                         {this.renderConfirmationDialog(context)}
                     </Panel>
                 )}
             </LocalizationContextConsumer>
         );
-    }
-
-    private readonly setTheme = (ev: React.MouseEvent<HTMLElement>, darkTheme: boolean) => {
-        this.props.onSetTheme(darkTheme ? Theme.dark : Theme.light);
     }
 
     private readonly renderConfirmationDialog = (context: LocalizationContextInterface) => {
@@ -204,7 +206,7 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
         });
     }
 
-    private readonly onConnectionStringChanged = (hubConnectionString: string)  => {
+    private readonly onConnectionStringChanged = (hubConnectionString: string) => {
         this.setState({
             error: validateConnectionString(hubConnectionString),
             hubConnectionString,
@@ -257,7 +259,7 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
     }
 
     private readonly saveSettings = () => {
-        this.props.onSettingsSave({...this.state});
+        this.props.onSettingsSave({ ...this.state });
         this.setState({
             isDirty: false
         });
@@ -273,37 +275,37 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
 
     private readonly settingsFooter = () => {
         return (
-        <LocalizationContextConsumer>
-            {(context: LocalizationContextInterface) => (
-                <footer className="settings-footer">
-                    <section aria-label={context.t(ResourceKeys.settings.questions.headerText)}>
-                        <h3 role="heading" aria-level={1}>{context.t(ResourceKeys.settings.questions.headerText)}</h3>
-                        <ul className="faq">
-                            <li className="faq-item">
-                                <Link
-                                    href={context.t(ResourceKeys.settings.questions.questions.documentation.link)}
-                                    target="_blank"
-                                >{context.t(ResourceKeys.settings.questions.questions.documentation.text)}
-                                </Link>
-                            </li>
-                        </ul>
-                    </section>
-                    <section className="footer-buttons">
-                        <h3 role="heading" aria-level={1}>{context.t(ResourceKeys.settings.footerText)}</h3>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={this.disableSaveButton()}
-                            text={context.t(ResourceKeys.settings.save)}
-                            onClick={this.saveSettings}
-                        />
-                        <DefaultButton
-                            type="reset"
-                            text={context.t(ResourceKeys.settings.cancel)}
-                            onClick={this.closePane}
-                        />
-                    </section>
-                </footer>
-            )}
+            <LocalizationContextConsumer>
+                {(context: LocalizationContextInterface) => (
+                    <footer className="settings-footer">
+                        <section aria-label={context.t(ResourceKeys.settings.questions.headerText)}>
+                            <h3 role="heading" aria-level={1}>{context.t(ResourceKeys.settings.questions.headerText)}</h3>
+                            <ul className="faq">
+                                <li className="faq-item">
+                                    <Link
+                                        href={context.t(ResourceKeys.settings.questions.questions.documentation.link)}
+                                        target="_blank"
+                                    >{context.t(ResourceKeys.settings.questions.questions.documentation.text)}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </section>
+                        <section className="footer-buttons">
+                            <h3 role="heading" aria-level={1}>{context.t(ResourceKeys.settings.footerText)}</h3>
+                            <PrimaryButton
+                                type="submit"
+                                disabled={this.disableSaveButton()}
+                                text={context.t(ResourceKeys.settings.save)}
+                                onClick={this.saveSettings}
+                            />
+                            <DefaultButton
+                                type="reset"
+                                text={context.t(ResourceKeys.settings.cancel)}
+                                onClick={this.closePane}
+                            />
+                        </section>
+                    </footer>
+                )}
             </LocalizationContextConsumer>
         );
     }
@@ -323,7 +325,7 @@ export default class SettingsPane extends React.Component<SettingsPaneProps & Se
         else {
             // when state is dirty and has no errors, check if private repo has been added along with it's connection string
             const privateLocationSetting = this.state.repositoryLocations.filter(location => location.repositoryLocationType === REPOSITORY_LOCATION_TYPE.Private);
-            if (privateLocationSetting && privateLocationSetting.length !== 0  ) {
+            if (privateLocationSetting && privateLocationSetting.length !== 0) {
                 return !privateLocationSetting[0].connectionString;
             }
         }
