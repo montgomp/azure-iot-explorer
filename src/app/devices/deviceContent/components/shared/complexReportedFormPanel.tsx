@@ -18,7 +18,7 @@ import { CLOSE } from '../../../../constants/iconNames';
 import { PropertyContent } from '../../../../api/models/modelDefinition';
 import ErrorBoundary from '../../../errorBoundary';
 import { getLocalizedData } from '../../../../api/dataTransforms/modelDefinitionTransform';
-import { Theme } from '../../../../../themer';
+import { ThemeContext } from '../../../../shared/contexts/themeContext';
 
 const EditorPromise = import('react-monaco-editor');
 const Editor = React.lazy(() => EditorPromise);
@@ -28,7 +28,6 @@ export interface ReportedFormDataProps {
     formData: any; // tslint:disable-line:no-any
     schema: ParsedJsonSchema;
     modelDefinition: PropertyContent;
-    theme: Theme;
 }
 
 export interface ReportedFormActionProps {
@@ -104,6 +103,7 @@ export default class ComplexReportedFormPanel extends React.Component<ReportedFo
     }
 
     private readonly createJsonEditor = (context: LocalizationContextInterface) => {
+        const { monacoTheme } = React.useContext(ThemeContext);
         return (
             <form>
                 <Label>{context.t(ResourceKeys.deviceProperties.editor.label, {schema: this.getSettingSchema()})}</Label>
@@ -117,7 +117,7 @@ export default class ComplexReportedFormPanel extends React.Component<ReportedFo
                             }}
                             height="70vh"
                             value={JSON.stringify(this.state.formData, null, '\t')}
-                            theme={this.props.theme === Theme.light ? 'vs-light' : 'vs-dark'}
+                            theme={monacoTheme}
                         />
                     </React.Suspense>
                 </div>

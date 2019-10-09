@@ -8,13 +8,8 @@ import { Customizer } from 'office-ui-fabric-react/lib/Utilities';
 import { IPartialTheme, createTheme } from 'office-ui-fabric-react/lib/Styling';
 import { SCOPED_SETTINGS } from './app/constants/themes';
 
-export enum Theme {
-    light = 'light',
-    dark = 'dark',
-}
 interface ThemeProps {
     officeTheme: IPartialTheme;
-    theme: Theme;
 }
 
 export default class Themer extends React.Component<ThemeProps> {

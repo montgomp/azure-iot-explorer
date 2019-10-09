@@ -18,7 +18,7 @@ import InterfaceNotFoundMessageBoxContainer from '../shared/interfaceNotFoundMes
 import { REFRESH } from '../../../../constants/iconNames';
 import ErrorBoundary from '../../../errorBoundary';
 import { getLocalizedData } from '../../../../api/dataTransforms/modelDefinitionTransform';
-import { Theme } from '../../../../../themer';
+import { ThemeContext } from '../../../../shared/contexts/themeContext';
 
 const EditorPromise = import('react-monaco-editor');
 const Editor = React.lazy(() => EditorPromise);
@@ -26,7 +26,6 @@ const Editor = React.lazy(() => EditorPromise);
 export interface DeviceInterfaceProps {
     modelDefinitionWithSource: ModelDefinitionWithSourceWrapper;
     isLoading: boolean;
-    theme: Theme;
 }
 
 export interface DeviceInterfaceDispatchProps {
@@ -131,21 +130,22 @@ export default class DeviceInterfaces extends React.Component<DeviceInterfacePro
 
     private readonly renderInterfaceViewer = () => {
         const modelDefinition = this.props.modelDefinitionWithSource.modelDefinition;
+        const {monacoTheme} = React.useContext(ThemeContext);
         return (
             <article className="interface-definition" >
                 { modelDefinition &&
                     <div className="monaco-editor">
                         <React.Suspense fallback={<Spinner title={'loading'} size={SpinnerSize.large} />}>
-                            <Editor
-                                language="json"
-                                height="calc(100vh - 400px)"
-                                value={JSON.stringify(modelDefinition, null, '\t')}
-                                options={{
-                                    automaticLayout: true,
-                                    readOnly: true
-                                }}
-                                theme={this.props.theme === Theme.light ? 'vs-light' : 'vs-dark'}
-                            />
+                                <Editor
+                                    language="json"
+                                    height="calc(100vh - 400px)"
+                                    value={JSON.stringify(modelDefinition, null, '\t')}
+                                    options={{
+                                        automaticLayout: true,
+                                        readOnly: true
+                                    }}
+                                    theme={monacoTheme}
+                                />
                         </React.Suspense>
                     </div>
                 }
