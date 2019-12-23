@@ -11,7 +11,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { LocalizationContextConsumer, LocalizationContextInterface } from '../../shared/contexts/localizationContext';
 import { ResourceKeys } from '../../../localization/resourceKeys';
 import { getConnectionInfoFromConnectionString } from '../../api/shared/utils';
-import { COPY } from '../../constants/iconNames';
+import { COPY, REMOVE } from '../../constants/iconNames';
 import { Notification, NotificationType } from '../../api/models/notification';
 import '../../css/_connectivityPane.scss';
 import { generateConnectionStringValidationError } from '../../shared/utils/hubConnectionStringHelper';
@@ -45,27 +45,26 @@ export default class HubConnectionStringSection extends React.Component<HubConne
         );
     }
 
-    private readonly onRenderConnectionString = (item: IComboBoxOption): JSX.Element => {
+    private readonly onRenderConnectionString = (item: IComboBoxOption, t: TranslationFunction): JSX.Element => {
         const removeClick = () => {
             const connections = this.props.connectionStringList.filter(x => x !== item.key as string);
             this.props.onSaveConnectionString('', connections, '');
         };
         const info = getConnectionInfoFromConnectionString(item.key as string);
-        const ariaLabelRemove = `Remove connection to host: ${info.hostName}`;
         return (
             <LocalizationContextConsumer>
                 {(context: LocalizationContextInterface) => (
                     <Stack horizontal={true}>
-                        <Stack.Item align="stretch">
-                            <span className="connection-info">{item.text}</span>
+                        <Stack.Item align="stretch" className="connection-info">
+                            {item.text}
                         </Stack.Item>
                         <Stack.Item align="end">
                             <TooltipHost
-                                content={ariaLabelRemove}
+                                content={t(ResourceKeys.connectivityPane.connectionStringComboBox.item.ariaLabel, {hostName: info.hostName, sharedAccessKeyName: info.sharedAccessKeyName})}
                             >
                                 <IconButton
-                                    iconProps={{ iconName: 'Cancel' }}
-                                    ariaLabel={ariaLabelRemove}
+                                    iconProps={{ iconName: REMOVE }}
+                                    ariaLabel={t(ResourceKeys.connectivityPane.connectionStringComboBox.item.ariaLabel, {hostName: info.hostName, sharedAccessKeyName: info.sharedAccessKeyName})}
                                     onClick={removeClick}
                                     data={item}
                                 />
@@ -92,17 +91,20 @@ export default class HubConnectionStringSection extends React.Component<HubConne
         const info = getConnectionInfoFromConnectionString(item);
         return `HostName:${info.hostName}; SharedAccessKeyName:${info.sharedAccessKeyName}`;
     }
-    private readonly getComboBoxOption = (item: string) => {
+    private readonly getComboBoxOption = (item: string, t: TranslationFunction) => {
         const info = getConnectionInfoFromConnectionString(item);
 
         return {
-            ariaLabel: `Connection to host ${info.hostName} with shared access key for ${info.sharedAccessKeyName}`,
+            ariaLabel: t(ResourceKeys.connectivityPane.connectionStringComboBox.item.ariaLabel, {hostName: info.hostName, sharedAccessKeyName: info.sharedAccessKeyName}),
             key: item,
             text: this.getComboBoxOptionText(item)
         };
     }
     private readonly renderConnectionStringList = (t: TranslationFunction) => {
-        const options: IComboBoxOption[] = this.props.connectionStringList && this.props.connectionStringList.map(this.getComboBoxOption);
+        const options: IComboBoxOption[] = this.props.connectionStringList && this.props.connectionStringList.map(item => this.getComboBoxOption(item, t));
+        const renderConnectionString = (item: IComboBoxOption) => {
+            return this.onRenderConnectionString(item, t);
+        };
 
         return (
             <>
@@ -112,12 +114,13 @@ export default class HubConnectionStringSection extends React.Component<HubConne
                     className="connection-string-dropDown"
                     label={t(ResourceKeys.connectivityPane.connectionStringComboBox.label)}
                     ariaLabel={t(ResourceKeys.connectivityPane.connectionStringComboBox.ariaLabel)}
-                    onRenderOption={this.onRenderConnectionString}
+                    onRenderOption={renderConnectionString}
                     options={options}
-                    text={this.props.connectionString ? this.getComboBoxOptionText(this.props.connectionString) : 'Select a saved connection string or paste a new connection string here'}
+                    text={this.props.connectionString ? this.getComboBoxOptionText(this.props.connectionString) : t(ResourceKeys.connectivityPane.connectionStringComboBox.prompt)}
                     onChange={this.onConnectionStringChanged}
                     selectedKey={this.props.connectionString}
                     errorMessage={t(generateConnectionStringValidationError(this.props.connectionString))}
+                    useComboBoxAsMenuWidth={true}
                 />
                 <input
                     aria-hidden={true}

@@ -18,7 +18,8 @@ exports[`login/components/connectivityPane matches snapshot 1`] = `
     onRenderOption={[Function]}
     options={Array []}
     selectedKey=""
-    text="Select a saved connection string or paste a new connection string here"
+    text="connectivityPane.connectionStringComboBox.prompt"
+    useComboBoxAsMenuWidth={true}
   />
   <input
     aria-hidden={true}

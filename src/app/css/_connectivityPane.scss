@@ -56,8 +56,10 @@
 .connection-string-dropDown {
     width: 95% !important;
 }
-.copy-button{
-    margin-top: 28px;
+.connection-info {
+    min-width: 495px;
+    max-width: 495px;
+    text-overflow: ellipsis;
 }
 
 .hidden {
