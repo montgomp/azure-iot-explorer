@@ -1,0 +1,42 @@
+{
+    "@id": "dtmi:azure:iot:armResource:1",
+    "@type": "Interface",
+    "displayName": "Azure Resource",
+    "@context":"https://azure.com/v3/contexts/Model.json",
+    "extends": [
+        "dtmi:azure:iot:dataSource:1",
+        "dtmi:azure:iot:dataTarget:1"
+    ],
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "name",
+            "displayName": "Name",
+            "schema": "string"
+        },
+        {
+            "@type": "Property",
+            "name": "id",
+            "displayName": "Id",
+            "schema": "string"
+        },
+        {
+            "@type": "Property",
+            "name": "subscription",
+            "displayName": "Subscription",
+            "schema": "string"
+        },
+        {
+            "@type": "Property",
+            "name": "resourceGroup",
+            "displayName": "Resource Group",
+            "schema": "string"
+        },
+        {
+            "@type": ["Property", "Location"],
+            "name": "location",
+            "displayName": "Location",
+            "schema": "string"
+        }
+    ]
+}

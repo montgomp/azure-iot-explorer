@@ -1,0 +1,15 @@
+{
+    "@id": "dtmi:azure:iot:deviceProvisioningService:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Device Provisioning Service",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Relationship",
+            "name": "linkedHubs",
+            "displayName": "Linked IoT Hubs",
+            "target": "dtmi:azure:iot:iotHub:1"
+        }       
+    ]
+}

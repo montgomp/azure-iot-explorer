@@ -1,0 +1,13 @@
+{
+    "@id": "dtmi:azure:iot:dataSource:1",
+    "@type": "Interface",
+    "@context":"https://azure.com/v3/contexts/Model.json",
+    "contents": [
+        {
+            "@type": "Relationship",
+            "name": "egress",
+            "displayName": "Data Egress",
+            "target": "dtmi:azure:iot:armResource:1"
+        }
+    ]
+}

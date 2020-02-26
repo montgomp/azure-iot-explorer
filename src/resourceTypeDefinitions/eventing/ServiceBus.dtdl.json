@@ -1,0 +1,27 @@
+{
+    "@id": "dtmi:azure:iot:ServiceBus:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Event Grid",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "queues",
+            "displayName": "Queues",
+            "schema": {
+                "@type": "Array",
+                "elementSchema": "string"
+            }
+        },
+        {
+            "@type": "Property",
+            "name": "topics",
+            "displayName": "Topics",
+            "schema": {
+                "@type": "Array",
+                "elementSchema": "string"
+            }
+        }
+    ]
+}

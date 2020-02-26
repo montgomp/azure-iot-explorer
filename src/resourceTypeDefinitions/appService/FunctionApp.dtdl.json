@@ -1,0 +1,16 @@
+{
+    "@id": "dtmi:azure:iot:functionApp:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Function App",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Relationship",
+            "name": "functions",
+            "displayName": "Functions",
+            "target": "dtmi:azure:iot:functionItem:1"
+        }
+        
+    ]
+}

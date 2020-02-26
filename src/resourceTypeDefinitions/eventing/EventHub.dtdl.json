@@ -1,0 +1,7 @@
+{
+    "@id": "dtmi:azure:iot:eventHub:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Event Hub",
+    "extends": "dtmi:azure:iot:armResource:1"
+}

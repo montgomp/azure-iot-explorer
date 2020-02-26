@@ -1,0 +1,27 @@
+{
+    "@id": "dtmi:azure:iot:keyVault:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Key Vault",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "secrets",
+            "displayName": "Secrets",
+            "schema": {
+                "@type": "Array",
+                "elementSchema": "string"
+            }
+        },
+        {
+            "@type": "Property",
+            "name": "certificates",
+            "displayName": "Certificates",
+            "schema": {
+                "@type": "Array",
+                "elementSchema": "string"
+            }
+        }
+    ]
+}

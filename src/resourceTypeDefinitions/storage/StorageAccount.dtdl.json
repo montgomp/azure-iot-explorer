@@ -1,0 +1,18 @@
+{
+    "@id": "dtmi:azure:iot:StorageAccount:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Storage Account",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "containers",
+            "displayName": "Containers",
+            "schema": {
+                "@type": "Array",
+                "elementSchema": "string"
+            }
+        }
+    ]
+}

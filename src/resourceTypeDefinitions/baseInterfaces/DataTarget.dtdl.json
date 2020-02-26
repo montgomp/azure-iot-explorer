@@ -1,0 +1,12 @@
+{
+    "@id": "dtmi:azure:iot:dataTarget:1",
+    "@type": "Interface",
+    "@context":"https://azure.com/v3/contexts/Model.json",
+    "contents": [
+        {
+            "@type": "Relationship",
+            "name": "ingress",
+            "displayName": "Data Ingress"
+        }
+    ]
+}

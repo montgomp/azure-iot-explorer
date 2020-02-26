@@ -1,0 +1,10 @@
+{
+    "@id": "dtmi:azure:iot:functionItem:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Function",
+    "extends": [
+        "dtmi:azure:iot:dataSource:1",
+        "dtmi:azure:iot:dataTarget:1"
+    ]
+}

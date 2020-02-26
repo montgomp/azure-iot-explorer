@@ -1,0 +1,40 @@
+{
+    "@id": "dtmi:azure:iot:iotHub:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "IoT Hub",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "edition",
+            "displayName": "Edition",
+            "schema": "string"
+        },
+        {
+            "@type": "Property",
+            "name": "numberOfUnits",
+            "displayName": "Number of Units",
+            "schema": "number"
+        },
+        {
+            "@type": "Relationship",
+            "name": "storageAccounts",
+            "displayName": "Storage Accounts",
+            "target": "dtmi:azure:iot:storageAccount:1"
+        },
+        {
+            "@type": "Relationship",
+            "name": "eventHubs",
+            "displayName": "Event Hubs",
+            "target": "dtmi:azure:iot:eventHub:1"
+        },
+        {
+            "@type": "Relationship",
+            "name": "serviceBus",
+            "displayName": "Service Bus",
+            "target": "dtmi:azure:iot:serviceBus:1"
+        }
+        
+    ]
+}

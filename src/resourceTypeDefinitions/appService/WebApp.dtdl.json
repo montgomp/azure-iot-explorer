@@ -1,0 +1,7 @@
+{
+    "@id": "dtmi:azure:iot:webApp:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Web App",
+    "extends": "dtmi:azure:iot:armResource:1"
+}

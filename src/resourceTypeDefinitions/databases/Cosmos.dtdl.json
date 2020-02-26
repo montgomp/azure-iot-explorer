@@ -1,0 +1,72 @@
+{
+    "@id": "dtmi:azure:iot:cosmosDB:1",
+    "@type": "Interface",
+    "@context": "https://azure.com/v3/contexts/Model.json",
+    "displayName": "Cosmos DB",
+    "extends": "dtmi:azure:iot:armResource:1",
+    "contents": [
+        {
+            "@type": "Property",
+            "name": "api",
+            "displayName": "API",
+            "schema": {
+                "@type": "Enum",
+                "valueSchema": "string",
+                "enumValues": [
+                    {
+                        "name": "sql",
+                        "displayName":"Core (SQL)",
+                        "enumValue": "sql"
+                    },
+                    {
+                        "name": "mongoDB",
+                        "displayName":"Azure Cosmos DB for MongoDB API",
+                        "enumValue": "mongoDB"
+                    },
+                    {
+                        "name": "cassandra",
+                        "displayName":"Cassandra",
+                        "enumValue": "cassandra"
+                    },
+                    {
+                        "name": "table",
+                        "displayName":"Azure Table",
+                        "enumValue": "table"
+                    },
+                    {
+                        "name": "gremlin",
+                        "displayName":"Gremlin (graph)",
+                        "enumValue": "gremlin"
+                    }
+                ]
+            }
+        },
+        {
+            "@type": "Property",
+            "name": "geoRedundant",
+            "displayName": "Geo-Redundancy",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Property",
+            "name": "multiregionWrites",
+            "displayName": "Multi-region Writes",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Property",
+            "name": "availabilityZones",
+            "displayName": "Availability Zones",
+            "schema": "boolean"
+        },
+        {
+            "@type": "Property",
+            "name": "zones",
+            "displayName": "Zones",
+            "schema": {
+                "@type": "Array",
+                "elementSchema": "string"
+            }
+        }
+    ]
+}
