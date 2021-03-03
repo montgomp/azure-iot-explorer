@@ -115,7 +115,10 @@
         "moduleDetail": "Module detail",
         "moduleTwin": "Module twin",
         "moduleMethod": "Module direct method",
-        "addModuleIdentity": "Add module identity"
+        "addModuleIdentity": "Add module identity",
+        "moduleDigitalTwinsComponents": "Digital twin components",
+        "moduleDigitalTwinsModel": "Digital twin model",
+        "moduleDigitalTwinsTwin": "Digital twin content"
     },
     "deviceContent": {
         "start": "Select a device to start",
@@ -591,6 +594,7 @@
         },
         "columns": {
             "displayName": "Name",
+            "moduleName": "Module name",
             "timestamp": "Enqueue time",
             "schema": "Schema",
             "unit": "Unit",

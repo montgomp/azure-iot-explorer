@@ -22,6 +22,7 @@ const NO_CONTENT_SUCCESS = 204;
 const SERVER_WAIT = 3000; // how long we'll let the call for eventHub messages run in non-socket
 const receivers: ReceiveHandler[] = [];
 const IOTHUB_CONNECTION_DEVICE_ID = 'iothub-connection-device-id';
+const IOTHUB_CONNECTION_MODULE_ID = 'iothub-connection-module-id';
 
 let client: EventHubClient = null;
 let connectionString: string = ''; // would be the same as connection string or in the format of `${connectionString}/${hubName}`
@@ -31,7 +32,7 @@ interface Message {
     body: any; // tslint:disable-line:no-any
     enqueuedTime: string;
     properties?: any; // tslint:disable-line:no-any
-    systemProperties?: {[key: string]: string};
+    systemProperties?: { [key: string]: string };
 }
 
 export class ServerBase {
@@ -56,11 +57,13 @@ export class ServerBase {
         app.get(readFileUri, handleReadFileRequest);
         app.get(getDirectoriesUri, handleGetDirectoriesRequest);
 
-        app.listen(this.port).on('error', () => { throw new Error(
-           `Failed to start the app on port ${this.port} as it is in use.
+        app.listen(this.port).on('error', () => {
+            throw new Error(
+                `Failed to start the app on port ${this.port} as it is in use.
             You can still view static pages, but requests cannot be made to the services if the port is still occupied.
             To get around with the issue, configure a custom port by setting the system environment variable 'AZURE_IOT_EXPLORER_PORT' to an available port number.
-            To learn more, please visit https://github.com/Azure/azure-iot-explorer/wiki/FAQ`); });
+            To learn more, please visit https://github.com/Azure/azure-iot-explorer/wiki/FAQ`);
+        });
     }
 }
 
@@ -197,7 +200,7 @@ export const handleCloudToDevicePostRequest = (req: express.Request, res: expres
             hubClient.open(() => {
                 const message = new CloudToDeviceMessage(req.body.body);
                 addPropertiesToCloudToDeviceMessage(message, req.body.properties);
-                hubClient.send(req.body.deviceId, message,  (err, result) => {
+                hubClient.send(req.body.deviceId, message, (err, result) => {
                     if (err) {
                         res.status(SERVER_ERROR).send(err);
                     } else {
@@ -258,19 +261,19 @@ export const handleModelRepoPostRequest = (req: express.Request, res: express.Re
         }
         const controllerRequest = req.body;
         request(
-        {
-            body: controllerRequest.body || null,
-            headers: controllerRequest.headers || null,
-            method: controllerRequest.method || 'GET',
-            uri: controllerRequest.uri
-        },
-        (err, httpsres, body) => {
-            if (!!err) {
-                res.status(SERVER_ERROR).send(err);
-            } else {
-                res.status((httpsres && httpsres.statusCode) || SUCCESS).send((httpsres && httpsres.body) || {}); //tslint:disable-line
-            }
-        });
+            {
+                body: controllerRequest.body || null,
+                headers: controllerRequest.headers || null,
+                method: controllerRequest.method || 'GET',
+                uri: controllerRequest.uri
+            },
+            (err, httpsres, body) => {
+                if (!!err) {
+                    res.status(SERVER_ERROR).send(err);
+                } else {
+                    res.status((httpsres && httpsres.statusCode) || SUCCESS).send((httpsres && httpsres.body) || {}); //tslint:disable-line
+                }
+            });
     } catch (error) {
         stopReceivers();
         res.status(SERVER_ERROR).send(error);
@@ -278,7 +281,7 @@ export const handleModelRepoPostRequest = (req: express.Request, res: express.Re
 };
 
 // tslint:disable-next-line:cyclomatic-complexity
-export const addPropertiesToCloudToDeviceMessage = (message: CloudToDeviceMessage, properties: Array<{key: string, value: string, isSystemProperty: boolean}>) => {
+export const addPropertiesToCloudToDeviceMessage = (message: CloudToDeviceMessage, properties: Array<{ key: string, value: string, isSystemProperty: boolean }>) => {
     if (!properties || properties.length === 0) {
         return;
     }
@@ -318,13 +321,12 @@ export const addPropertiesToCloudToDeviceMessage = (message: CloudToDeviceMessag
 };
 
 // tslint:disable-next-line:cyclomatic-complexity
-export const eventHubProvider = async (res: any, body: any) =>  { // tslint:disable-line: no-any
+export const eventHubProvider = async (res: any, body: any) => { // tslint:disable-line: no-any
     try {
         if (!eventHubClientStopping) {
             if (!client ||
-                body.hubConnectionString && body.hubConnectionString !== connectionString  ||
-                body.customEventHubConnectionString && `${body.customEventHubConnectionString}/${body.customEventHubName}` !== connectionString)
-            {
+                body.hubConnectionString && body.hubConnectionString !== connectionString ||
+                body.customEventHubConnectionString && `${body.customEventHubConnectionString}/${body.customEventHubName}` !== connectionString) {
                 client = body.customEventHubConnectionString ?
                     await EventHubClient.createFromConnectionString(body.customEventHubConnectionString, body.customEventHubName) :
                     await EventHubClient.createFromIotHubConnectionString(body.hubConnectionString);
@@ -346,7 +348,7 @@ export const eventHubProvider = async (res: any, body: any) =>  { // tslint:disa
                 res.status(NOT_FOUND).send('Nothing to return');
             }
 
-            return handleMessages(body.deviceId, client, hubInfo, partitionIds, startTime, body.consumerGroup);
+            return handleMessages(body.deviceId, body.moduleId, client, hubInfo, partitionIds, startTime, body.consumerGroup);
         } else {
             res.status(CONFLICT).send('Client currently stopping');
         }
@@ -380,22 +382,25 @@ export const stopClient = async () => {
     });
 };
 
-const handleMessages = async (deviceId: string, eventHubClient: EventHubClient, hubInfo: EventHubRuntimeInformation, partitionIds: string[], startTime: number, consumerGroup: string) => {
+const handleMessages = async (deviceId: string, moduleId: string, eventHubClient: EventHubClient, hubInfo: EventHubRuntimeInformation, partitionIds: string[], startTime: number, consumerGroup: string) => {
     const messages: Message[] = []; // tslint:disable-line: no-any
+    // tslint:disable-next-line:cyclomatic-complexity
     const onMessage = async (eventData: any) => { // tslint:disable-line: no-any
         if (eventData && eventData.annotations && eventData.annotations[IOTHUB_CONNECTION_DEVICE_ID] === deviceId) {
-            const message: Message = {
-                body: eventData.body,
-                enqueuedTime: eventData.enqueuedTimeUtc,
-                properties: eventData.applicationProperties
-            };
-            message.systemProperties = eventData.annotations;
-            messages.push(message);
+            if (moduleId === undefined || eventData.annotations[IOTHUB_CONNECTION_MODULE_ID]) {
+                const message: Message = {
+                    body: eventData.body,
+                    enqueuedTime: eventData.enqueuedTimeUtc,
+                    properties: eventData.applicationProperties
+                };
+                message.systemProperties = eventData.annotations;
+                messages.push(message);
+            }
         }
     };
 
     partitionIds.forEach(async (partitionId: string) => {
-        const receiveOptions =  {
+        const receiveOptions = {
             consumerGroup,
             enableReceiverRuntimeMetric: true,
             eventPosition: EventPosition.fromEnqueuedTime(startTime),

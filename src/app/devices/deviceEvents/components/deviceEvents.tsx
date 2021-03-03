@@ -243,10 +243,11 @@ export const DeviceEvents: React.FC = () => {
                         <div className="pnp-modeled-list">
                             <div className="list-header list-header-uncollapsible flex-grid-row">
                                 <span className="col-sm2">{t(ResourceKeys.deviceEvents.columns.timestamp)}</span>
+                                <span className="col-sm1">{t(ResourceKeys.deviceEvents.columns.moduleName)}</span>
                                 <span className="col-sm2">{t(ResourceKeys.deviceEvents.columns.displayName)}</span>
                                 <span className="col-sm2">{t(ResourceKeys.deviceEvents.columns.schema)}</span>
                                 <span className="col-sm2">{t(ResourceKeys.deviceEvents.columns.unit)}</span>
-                                <span className="col-sm4">{t(ResourceKeys.deviceEvents.columns.value)}</span>
+                                <span className="col-sm3">{t(ResourceKeys.deviceEvents.columns.value)}</span>
                             </div>
                         </div>
                         <section role="feed">
@@ -271,6 +272,7 @@ export const DeviceEvents: React.FC = () => {
                 <section className="flex-grid-row item-summary">
                     <ErrorBoundary error={t(ResourceKeys.errorBoundary.text)}>
                         {renderTimestamp(event.enqueuedTime)}
+                        {renderModuleName(event.systemProperties['iothub-connection-module-id'])}
                         {renderEventName()}
                         {renderEventSchema()}
                         {renderEventUnit()}
@@ -283,12 +285,12 @@ export const DeviceEvents: React.FC = () => {
 
     const renderEventsWithSchemaProperty = (event: Message, index: number) => {
         const { telemetryModelDefinition, parsedSchema } = getModelDefinitionAndSchema(event.systemProperties[TELEMETRY_SCHEMA_PROP]);
-
         return (
             <article className="list-item event-list-item" role="article" key={index}>
                 <section className="flex-grid-row item-summary">
                     <ErrorBoundary error={t(ResourceKeys.errorBoundary.text)}>
                         {renderTimestamp(event.enqueuedTime)}
+                        {renderModuleName(event.systemProperties['iothub-connection-module-id'])}
                         {renderEventName(telemetryModelDefinition)}
                         {renderEventSchema(telemetryModelDefinition)}
                         {renderEventUnit(telemetryModelDefinition)}
@@ -313,6 +315,7 @@ export const DeviceEvents: React.FC = () => {
                         <section className={`flex-grid-row item-summary ${isNotItemLast && 'item-summary-partial'}`}>
                             <ErrorBoundary error={t(ResourceKeys.errorBoundary.text)}>
                                 {renderTimestamp(keyIndex === 0 ? event.enqueuedTime : null)}
+                                {renderModuleName(event.systemProperties['iothub-connection-module-id'])}
                                 {renderEventName(telemetryModelDefinition)}
                                 {renderEventSchema(telemetryModelDefinition)}
                                 {renderEventUnit(telemetryModelDefinition)}
@@ -328,6 +331,7 @@ export const DeviceEvents: React.FC = () => {
                 <section className="flex-grid-row item-summary">
                     <ErrorBoundary error={t(ResourceKeys.errorBoundary.text)}>
                         {renderTimestamp(event.enqueuedTime)}
+                        {renderModuleName(event.systemProperties['iothub-connection-module-id'])}
                         {renderEventName()}
                         {renderEventSchema()}
                         {renderEventUnit()}
@@ -343,6 +347,16 @@ export const DeviceEvents: React.FC = () => {
             <div className="col-sm2">
                 <Label aria-label={t(ResourceKeys.deviceEvents.columns.timestamp)}>
                     {enqueuedTime && parseDateTimeString(enqueuedTime)}
+                </Label>
+            </div>
+        );
+    };
+
+    const renderModuleName = (moduleName?: string) => {
+        return(
+            <div className="col-sm1">
+                <Label aria-label={t(ResourceKeys.deviceEvents.columns.moduleName)}>
+                    {`/${moduleName || ''}`}
                 </Label>
             </div>
         );
@@ -385,7 +399,7 @@ export const DeviceEvents: React.FC = () => {
         if (key && !schema) { // DTDL doesn't contain corresponding key
             const labelContent = t(ResourceKeys.deviceEvents.columns.validation.key.isNotSpecified, { key });
             return(
-                <div className="column-value-text col-sm4">
+                <div className="column-value-text col-sm3">
                     <span aria-label={t(ResourceKeys.deviceEvents.columns.value)}>
                         {JSON.stringify(eventBody, undefined, JSON_SPACES)}
                         <Label className="value-validation-error">
@@ -402,7 +416,7 @@ export const DeviceEvents: React.FC = () => {
                 receivedKey: Object.keys(eventBody)[0]
             }) : t(ResourceKeys.deviceEvents.columns.validation.value.bodyIsEmpty);
             return(
-                <div className="column-value-text col-sm4">
+                <div className="column-value-text col-sm3">
                     <span aria-label={t(ResourceKeys.deviceEvents.columns.value)}>
                         {JSON.stringify(eventBody, undefined, JSON_SPACES)}
                         <Label className="value-validation-error">
@@ -420,7 +434,7 @@ export const DeviceEvents: React.FC = () => {
         const errors = getSchemaValidationErrors(eventBody[key], schema, true);
 
         return(
-            <div className="column-value-text col-sm4">
+            <div className="column-value-text col-sm3">
                 <Label aria-label={t(ResourceKeys.deviceEvents.columns.value)}>
                     {JSON.stringify(eventBody, undefined, JSON_SPACES)}
                     {errors.length !== 0 &&
@@ -440,7 +454,7 @@ export const DeviceEvents: React.FC = () => {
 
     const renderMessageBodyWithNoSchema = (eventBody: any) => { // tslint:disable-line:no-any
         return(
-            <div className="column-value-text col-sm4">
+            <div className="column-value-text col-sm3">
                 <Label aria-label={t(ResourceKeys.deviceEvents.columns.value)}>
                     {JSON.stringify(eventBody, undefined, JSON_SPACES)}
                 </Label>

@@ -21,6 +21,9 @@ export class ResourceKeys {
       ioTPlugAndPlay : "breadcrumb.ioTPlugAndPlay",
       methods : "breadcrumb.methods",
       moduleDetail : "breadcrumb.moduleDetail",
+      moduleDigitalTwinsComponents : "breadcrumb.moduleDigitalTwinsComponents",
+      moduleDigitalTwinsModel : "breadcrumb.moduleDigitalTwinsModel",
+      moduleDigitalTwinsTwin : "breadcrumb.moduleDigitalTwinsTwin",
       moduleIdentity : "breadcrumb.moduleIdentity",
       moduleMethod : "breadcrumb.moduleMethod",
       moduleTwin : "breadcrumb.moduleTwin",
@@ -258,6 +261,7 @@ export class ResourceKeys {
    public static deviceEvents = {
       columns : {
          displayName : "deviceEvents.columns.displayName",
+         moduleName : "deviceEvents.columns.moduleName",
          schema : "deviceEvents.columns.schema",
          timestamp : "deviceEvents.columns.timestamp",
          unit : "deviceEvents.columns.unit",
